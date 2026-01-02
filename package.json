@@ -1,16 +1,25 @@
 {
   "name": "foodie",
   "version": "1.0.0",
-  "description": "food applicationn",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "parcel index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SahithaDev/Foodie.git"
   },
   "keywords": [
     "react"
   ],
   "author": "sahitha",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SahithaDev/Foodie/issues"
+  },
+  "homepage": "https://github.com/SahithaDev/Foodie#readme",
+  "description": "",
   "devDependencies": {
+    "parce": "^1.2.8",
     "parcel": "^2.16.3"
   },
   "dependencies": {

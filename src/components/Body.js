@@ -1,21 +1,24 @@
 import RestaurantCard from "./RestaurantCard";
 import resObj from "../utils/mockData";
+import { useState } from "react";
+import resObj from "../utils/mockData";
 const Body = () => {
+  const [resData, setResData] = useState(resObj);
   return (
     <div className="body">
       <div className="filter">
         <button
           onClick={() => {
-            console.log("FULL resObj:", resObj); // All items
             const toprated = resObj.filter((res) => res.info.avgRating > 4);
+            setResData(toprated);
             console.log("FILTERED toprated:", toprated); // Only >4
           }}
         >
-          Check Console
+          Top rated
         </button>
       </div>
       <div className="res-card">
-        {resObj.map(
+        {resData.map(
           (
             restaurant //On each loop, restaurant is one element of resObj.
           ) => (

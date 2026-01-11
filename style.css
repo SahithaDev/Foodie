@@ -46,6 +46,7 @@
 }
 .card:hover {
   cursor: pointer;
+  border: 1px solid black;
 }
 .body {
   margin: 10px;
@@ -63,4 +64,8 @@
   display: flex;
   flex-wrap: wrap;
   gap: 80px;
+}
+.login-btn {
+  padding: 10px;
+  margin: 2px;
 }

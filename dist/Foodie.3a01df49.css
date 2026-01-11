@@ -49,6 +49,7 @@
 
 .card:hover {
   cursor: pointer;
+  border: 1px solid #000;
 }
 
 .body {
@@ -69,5 +70,10 @@
   flex-wrap: wrap;
   gap: 80px;
   display: flex;
+}
+
+.login-btn {
+  margin: 2px;
+  padding: 10px;
 }
 /*# sourceMappingURL=Foodie.3a01df49.css.map */

@@ -55,4 +55,19 @@
   margin: 10px;
   padding: 10px;
 }
+
+.shimmer-card {
+  background-color: #d3d3d3;
+  gap: 10px;
+  width: 245px;
+  height: 400px;
+  margin: 10px;
+  padding: 5px;
+}
+
+.shimmer-container {
+  flex-wrap: wrap;
+  gap: 80px;
+  display: flex;
+}
 /*# sourceMappingURL=Foodie.3a01df49.css.map */

@@ -19862,6 +19862,7 @@ var _s = $RefreshSig$();
 const Body = ()=>{
     _s();
     const [listOfRestaurants, setlistOfRestaurants] = (0, _react.useState)([]);
+    const [filteredRestaurants, setFilteredRestaurants] = (0, _react.useState)([]);
     const [searchText, setSearchText] = (0, _react.useState)([]);
     (0, _react.useEffect)(()=>{
         fetchData();
@@ -19869,11 +19870,13 @@ const Body = ()=>{
     const fetchData = async ()=>{
         const data = await fetch("https://www.swiggy.com/dapi/restaurants/list/v5?lat=17.5366218&lng=78.4844811&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING");
         const json = await data.json();
-        setlistOfRestaurants(json?.data.cards?.[2]?.card?.card?.gridElements?.infoWithStyle.restaurants || []); //it is mandatory to put json ,  before starting the api call (as the cards are present in json)
+        setlistOfRestaurants(json?.data.cards?.[2]?.card?.card?.gridElements?.infoWithStyle.restaurants || []);
+        setFilteredRestaurants(/**this is created to use the search functionality , like if i want to search something again 
+      it searches from the already filtered list , which cannot be possible to search someting**/ json?.data.cards?.[2]?.card?.card?.gridElements?.infoWithStyle.restaurants || []); //it is mandatory to put json ,  before starting the api call (as the cards are present in json)
     };
     if (listOfRestaurants.length === 0) return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _shimmerUIDefault.default), {}, void 0, false, {
         fileName: "src/components/Body.js",
-        lineNumber: 22,
+        lineNumber: 29,
         columnNumber: 12
     }, undefined);
     return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -19887,74 +19890,74 @@ const Body = ()=>{
                         children: [
                             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("input", {
                                 type: "text",
-                                className: "seacrh-input",
+                                className: "search-input",
                                 value: searchText,
                                 onChange: (e)=>{
                                     setSearchText(e.target.value);
                                 }
                             }, void 0, false, {
                                 fileName: "src/components/Body.js",
-                                lineNumber: 29,
+                                lineNumber: 36,
                                 columnNumber: 11
                             }, undefined),
                             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
                                 onClick: ()=>{
                                     const searchRest = listOfRestaurants.filter((res)=>res.info.name.toLowerCase().includes(searchText.toLowerCase()));
-                                    setlistOfRestaurants(searchRest);
+                                    setFilteredRestaurants(searchRest);
                                 },
                                 children: "Search"
                             }, void 0, false, {
                                 fileName: "src/components/Body.js",
-                                lineNumber: 37,
+                                lineNumber: 44,
                                 columnNumber: 11
                             }, undefined)
                         ]
                     }, void 0, true, {
                         fileName: "src/components/Body.js",
-                        lineNumber: 28,
+                        lineNumber: 35,
                         columnNumber: 9
                     }, undefined),
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
                         onClick: ()=>{
                             const toprated = listOfRestaurants.filter((res)=>res.info.avgRating > 4);
-                            setlistOfRestaurants(toprated);
+                            setFilteredRestaurants(toprated);
                             console.log("FILTERED toprated:", toprated); // Only >4
                         },
                         children: "Top rated"
                     }, void 0, false, {
                         fileName: "src/components/Body.js",
-                        lineNumber: 48,
+                        lineNumber: 55,
                         columnNumber: 9
                     }, undefined)
                 ]
             }, void 0, true, {
                 fileName: "src/components/Body.js",
-                lineNumber: 27,
+                lineNumber: 34,
                 columnNumber: 7
             }, undefined),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
                 className: "res-card",
-                children: listOfRestaurants.map((restaurant //On each loop, restaurant is one element of resObj.
+                children: filteredRestaurants.map((restaurant //On each loop, restaurant is one element of resObj.
                 )=>/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _restaurantCardDefault.default), {
                         resData: restaurant
                     }, restaurant.info.id, false, {
                         fileName: "src/components/Body.js",
-                        lineNumber: 65,
+                        lineNumber: 72,
                         columnNumber: 13
                     }, undefined))
             }, void 0, false, {
                 fileName: "src/components/Body.js",
-                lineNumber: 60,
+                lineNumber: 67,
                 columnNumber: 7
             }, undefined)
         ]
     }, void 0, true, {
         fileName: "src/components/Body.js",
-        lineNumber: 26,
+        lineNumber: 33,
         columnNumber: 5
     }, undefined);
 };
-_s(Body, "W+RMt6CnmmEJ7yoC9cyGKWk+WzA=");
+_s(Body, "NAU2IEfTsVjYhwr3ckvl6DRKlIc=");
 _c = Body;
 exports.default = Body;
 var _c;

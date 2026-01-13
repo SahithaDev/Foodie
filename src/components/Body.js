@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Shimmer from "./ShimmerUI";
 const Body = () => {
   const [listOfRestaurants, setlistOfRestaurants] = useState([]);
+  const [filteredRestaurants, setFilteredRestaurants] = useState([]);
   const [searchText, setSearchText] = useState([]);
   useEffect(() => {
     fetchData();
@@ -14,6 +15,12 @@ const Body = () => {
     const json = await data.json();
 
     setlistOfRestaurants(
+      json?.data.cards?.[2]?.card?.card?.gridElements?.infoWithStyle
+        .restaurants || []
+    );
+    setFilteredRestaurants(
+      /**this is created to use the search functionality , like if i want to search something again 
+      it searches from the already filtered list , which cannot be possible to search someting**/
       json?.data.cards?.[2]?.card?.card?.gridElements?.infoWithStyle
         .restaurants || []
     ); //it is mandatory to put json ,  before starting the api call (as the cards are present in json)
@@ -28,7 +35,7 @@ const Body = () => {
         <div className="search">
           <input
             type="text"
-            className="seacrh-input"
+            className="search-input"
             value={searchText}
             onChange={(e) => {
               setSearchText(e.target.value);
@@ -39,7 +46,7 @@ const Body = () => {
               const searchRest = listOfRestaurants.filter((res) =>
                 res.info.name.toLowerCase().includes(searchText.toLowerCase())
               );
-              setlistOfRestaurants(searchRest);
+              setFilteredRestaurants(searchRest);
             }}
           >
             Search
@@ -50,7 +57,7 @@ const Body = () => {
             const toprated = listOfRestaurants.filter(
               (res) => res.info.avgRating > 4
             );
-            setlistOfRestaurants(toprated);
+            setFilteredRestaurants(toprated);
             console.log("FILTERED toprated:", toprated); // Only >4
           }}
         >
@@ -58,7 +65,7 @@ const Body = () => {
         </button>
       </div>
       <div className="res-card">
-        {listOfRestaurants.map(
+        {filteredRestaurants.map(
           (
             restaurant //On each loop, restaurant is one element of resObj.
           ) => (

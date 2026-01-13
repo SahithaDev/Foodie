@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Shimmer from "./ShimmerUI";
 const Body = () => {
   const [listOfRestaurants, setlistOfRestaurants] = useState([]);
+  const [searchText, setSearchText] = useState([]);
   useEffect(() => {
     fetchData();
   }, []);
@@ -24,6 +25,26 @@ const Body = () => {
   return (
     <div className="body">
       <div className="filter">
+        <div className="search">
+          <input
+            type="text"
+            className="seacrh-input"
+            value={searchText}
+            onChange={(e) => {
+              setSearchText(e.target.value);
+            }}
+          />
+          <button
+            onClick={() => {
+              const searchRest = listOfRestaurants.filter((res) =>
+                res.info.name.toLowerCase().includes(searchText.toLowerCase())
+              );
+              setlistOfRestaurants(searchRest);
+            }}
+          >
+            Search
+          </button>
+        </div>
         <button
           onClick={() => {
             const toprated = listOfRestaurants.filter(

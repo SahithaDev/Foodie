@@ -17526,7 +17526,7 @@ $RefreshReg$(_c, "Header");
   globalThis.$RefreshReg$ = prevRefreshReg;
   globalThis.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-dev-runtime":"dVPUn","../utils/constant":"2QBK6","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi","react":"jMk1U"}],"2QBK6":[function(require,module,exports,__globalThis) {
+},{"react/jsx-dev-runtime":"dVPUn","../utils/constant":"2QBK6","react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi"}],"2QBK6":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "LOGO_URL", ()=>LOGO_URL);
@@ -19862,6 +19862,7 @@ var _s = $RefreshSig$();
 const Body = ()=>{
     _s();
     const [listOfRestaurants, setlistOfRestaurants] = (0, _react.useState)([]);
+    const [searchText, setSearchText] = (0, _react.useState)([]);
     (0, _react.useEffect)(()=>{
         fetchData();
     }, []);
@@ -19872,7 +19873,7 @@ const Body = ()=>{
     };
     if (listOfRestaurants.length === 0) return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _shimmerUIDefault.default), {}, void 0, false, {
         fileName: "src/components/Body.js",
-        lineNumber: 21,
+        lineNumber: 22,
         columnNumber: 12
     }, undefined);
     return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -19880,21 +19881,55 @@ const Body = ()=>{
         children: [
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
                 className: "filter",
-                children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
-                    onClick: ()=>{
-                        const toprated = listOfRestaurants.filter((res)=>res.info.avgRating > 4);
-                        setlistOfRestaurants(toprated);
-                        console.log("FILTERED toprated:", toprated); // Only >4
-                    },
-                    children: "Top rated"
-                }, void 0, false, {
-                    fileName: "src/components/Body.js",
-                    lineNumber: 27,
-                    columnNumber: 9
-                }, undefined)
-            }, void 0, false, {
+                children: [
+                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                        className: "search",
+                        children: [
+                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("input", {
+                                type: "text",
+                                className: "seacrh-input",
+                                value: searchText,
+                                onChange: (e)=>{
+                                    setSearchText(e.target.value);
+                                }
+                            }, void 0, false, {
+                                fileName: "src/components/Body.js",
+                                lineNumber: 29,
+                                columnNumber: 11
+                            }, undefined),
+                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
+                                onClick: ()=>{
+                                    const searchRest = listOfRestaurants.filter((res)=>res.info.name.toLowerCase().includes(searchText.toLowerCase()));
+                                    setlistOfRestaurants(searchRest);
+                                },
+                                children: "Search"
+                            }, void 0, false, {
+                                fileName: "src/components/Body.js",
+                                lineNumber: 37,
+                                columnNumber: 11
+                            }, undefined)
+                        ]
+                    }, void 0, true, {
+                        fileName: "src/components/Body.js",
+                        lineNumber: 28,
+                        columnNumber: 9
+                    }, undefined),
+                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
+                        onClick: ()=>{
+                            const toprated = listOfRestaurants.filter((res)=>res.info.avgRating > 4);
+                            setlistOfRestaurants(toprated);
+                            console.log("FILTERED toprated:", toprated); // Only >4
+                        },
+                        children: "Top rated"
+                    }, void 0, false, {
+                        fileName: "src/components/Body.js",
+                        lineNumber: 48,
+                        columnNumber: 9
+                    }, undefined)
+                ]
+            }, void 0, true, {
                 fileName: "src/components/Body.js",
-                lineNumber: 26,
+                lineNumber: 27,
                 columnNumber: 7
             }, undefined),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -19904,22 +19939,22 @@ const Body = ()=>{
                         resData: restaurant
                     }, restaurant.info.id, false, {
                         fileName: "src/components/Body.js",
-                        lineNumber: 44,
+                        lineNumber: 65,
                         columnNumber: 13
                     }, undefined))
             }, void 0, false, {
                 fileName: "src/components/Body.js",
-                lineNumber: 39,
+                lineNumber: 60,
                 columnNumber: 7
             }, undefined)
         ]
     }, void 0, true, {
         fileName: "src/components/Body.js",
-        lineNumber: 25,
+        lineNumber: 26,
         columnNumber: 5
     }, undefined);
 };
-_s(Body, "kMT43ODGki7ra3lA5UXdz9Z/TR8=");
+_s(Body, "W+RMt6CnmmEJ7yoC9cyGKWk+WzA=");
 _c = Body;
 exports.default = Body;
 var _c;

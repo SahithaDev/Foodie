@@ -8,6 +8,11 @@
   width: 100px;
 }
 
+.filter {
+  justify-content: space-between;
+  display: flex;
+}
+
 .nav-items > ul {
   list-style: none;
   display: flex;

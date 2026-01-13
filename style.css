@@ -9,6 +9,10 @@
 .logo img {
   width: 100px;
 }
+.filter {
+  display: flex;
+  justify-content: space-between;
+}
 .nav-items > ul {
   display: flex;
   list-style: none;

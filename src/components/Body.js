@@ -1,6 +1,8 @@
 import RestaurantCard from "./RestaurantCard";
+import { SWIGGY_URL } from "../utils/constant";
 import { useState, useEffect } from "react";
 import Shimmer from "./ShimmerUI";
+import { Link } from "react-router-dom";
 const Body = () => {
   const [listOfRestaurants, setlistOfRestaurants] = useState([]);
   const [filteredRestaurants, setFilteredRestaurants] = useState([]);
@@ -9,20 +11,18 @@ const Body = () => {
     fetchData();
   }, []);
   const fetchData = async () => {
-    const data = await fetch(
-      "https://www.swiggy.com/dapi/restaurants/list/v5?lat=17.5366218&lng=78.4844811&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING"
-    );
+    const data = await fetch(SWIGGY_URL);
     const json = await data.json();
 
     setlistOfRestaurants(
-      json?.data.cards?.[2]?.card?.card?.gridElements?.infoWithStyle
-        .restaurants || []
+      json?.data.data.cards?.[1]?.card?.card?.gridElements?.infoWithStyle
+        .restaurants || [],
     );
     setFilteredRestaurants(
       /**this is created to use the search functionality , like if i want to search something again 
       it searches from the already filtered list , which cannot be possible to search someting**/
-      json?.data.cards?.[2]?.card?.card?.gridElements?.infoWithStyle
-        .restaurants || []
+      json?.data.data.cards?.[1]?.card?.card?.gridElements?.infoWithStyle
+        .restaurants || [],
     ); //it is mandatory to put json ,  before starting the api call (as the cards are present in json)
   };
   if (listOfRestaurants.length === 0) {
@@ -44,7 +44,7 @@ const Body = () => {
           <button
             onClick={() => {
               const searchRest = listOfRestaurants.filter((res) =>
-                res.info.name.toLowerCase().includes(searchText.toLowerCase())
+                res.info.name.toLowerCase().includes(searchText.toLowerCase()),
               );
               setFilteredRestaurants(searchRest);
             }}
@@ -55,7 +55,7 @@ const Body = () => {
         <button
           onClick={() => {
             const toprated = listOfRestaurants.filter(
-              (res) => res.info.avgRating > 4
+              (res) => res.info.avgRating > 4,
             );
             setFilteredRestaurants(toprated);
             console.log("FILTERED toprated:", toprated); // Only >4
@@ -67,10 +67,15 @@ const Body = () => {
       <div className="res-card">
         {filteredRestaurants.map(
           (
-            restaurant //On each loop, restaurant is one element of resObj.
+            restaurant, //On each loop, restaurant is one element of resObj.
           ) => (
-            <RestaurantCard key={restaurant.info.id} resData={restaurant} />
-          )
+            <Link
+              key={restaurant.info.id}
+              to={"/restaurants/" + restaurant.info.id}
+            >
+              <RestaurantCard resData={restaurant} />
+            </Link>
+          ),
         )}
       </div>
     </div>

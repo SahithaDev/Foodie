@@ -11,7 +11,7 @@ const useRestaurantMenu = () => {
   const fetchMenu = async () => {
     const data = await fetch(MENU_URL + resId);
     const json = await data.json();
-    setresInfo(json);
+    setresInfo(json.data);
   };
   if (!resInfo) return <Shimmer />;
 };

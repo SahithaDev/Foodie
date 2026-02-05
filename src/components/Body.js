@@ -3,6 +3,7 @@ import { SWIGGY_URL } from "../utils/constant";
 import { useState, useEffect } from "react";
 import Shimmer from "./ShimmerUI";
 import { Link } from "react-router-dom";
+import useOnlineStatus from "../utils/useOnlineStatus";
 const Body = () => {
   const [listOfRestaurants, setlistOfRestaurants] = useState([]);
   const [filteredRestaurants, setFilteredRestaurants] = useState([]);
@@ -25,6 +26,15 @@ const Body = () => {
         .restaurants || [],
     ); //it is mandatory to put json ,  before starting the api call (as the cards are present in json)
   };
+  const onlineStatus = useOnlineStatus();
+  if (onlineStatus === false) {
+    return (
+      <h1>
+        Looks like you're disconnected , please make sure that you have good
+        internet connection.
+      </h1>
+    );
+  }
   if (listOfRestaurants.length === 0) {
     return <Shimmer />;
   }

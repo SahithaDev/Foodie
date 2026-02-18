@@ -8,7 +8,7 @@ const Body = () => {
   const [listOfRestaurants, setlistOfRestaurants] = useState([]);
   const [filteredRestaurants, setFilteredRestaurants] = useState([]);
   const [searchText, setSearchText] = useState([]);
-  useEffect(() => {
+  const PAGE_SIZE = useEffect(() => {
     fetchData();
   }, []);
   const fetchData = async () => {
@@ -30,7 +30,7 @@ const Body = () => {
   if (onlineStatus === false) {
     return (
       <h1>
-        Looks like you're disconnected , please make sure that you have good
+        Looks like you're disconnected !! Please make sure that you have good
         internet connection.
       </h1>
     );
@@ -41,17 +41,18 @@ const Body = () => {
 
   return (
     <div className="body">
-      <div className="filter">
-        <div className="search">
+      <div className="flex justify-between">
+        <div>
           <input
             type="text"
-            className="search-input"
+            className="border border-black rounded m-5 "
             value={searchText}
             onChange={(e) => {
               setSearchText(e.target.value);
             }}
           />
           <button
+            className="bg-orange-500 text-white p-1 px-2 m-4 rounded-md"
             onClick={() => {
               const searchRest = listOfRestaurants.filter((res) =>
                 res.info.name.toLowerCase().includes(searchText.toLowerCase()),
@@ -63,9 +64,10 @@ const Body = () => {
           </button>
         </div>
         <button
+          className="rounded-md bg-orange-500 p-1 m-4 px-2 text-white"
           onClick={() => {
             const toprated = listOfRestaurants.filter(
-              (res) => res.info.avgRating > 4,
+              (res) => res.info.avgRating > 4.5,
             );
             setFilteredRestaurants(toprated);
             console.log("FILTERED toprated:", toprated); // Only >4
@@ -74,7 +76,7 @@ const Body = () => {
           Top rated
         </button>
       </div>
-      <div className="res-card">
+      <div className="flex flex-wrap gap-10 justify-items-start">
         {filteredRestaurants.map(
           (
             restaurant, //On each loop, restaurant is one element of resObj.

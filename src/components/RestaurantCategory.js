@@ -1,15 +1,28 @@
+import ItemList from "./ItemList";
+import { useState } from "react";
 const RestaurantCategory = ({ data }) => {
+  const [showItems, setshowItems] = useState(false);
+  const handleClick = () => {
+    setshowItems(!showItems);
+  };
   //header
   return (
     <div>
-      <div className=" shadow-lg w-6/12 mx-auto m-6 bg-gray-100 p-4 flex justify-between">
-        <span className="font-bold">
-          {data.title} ({data.itemCards.length})
-        </span>
-        <button>🔽</button>
+      <div className=" shadow-lg w-6/12 mx-auto m-6 bg-gray-100 p-4 ">
+        <div
+          className="flex justify-between cursor-pointer"
+          onClick={handleClick}
+        >
+          <span className="font-bold">
+            {data.title} ({data.itemCards.length})
+          </span>
+          <button>🔽</button>
+        </div>
       </div>
+      {showItems && <ItemList items={data.itemCards} />}
+      {/* render item-list only
+      if the showItems is true */}
     </div>
   );
-  ///accordion-body
 };
 export default RestaurantCategory;

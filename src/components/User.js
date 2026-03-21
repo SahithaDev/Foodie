@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import UserContext from "../utils/UserContext";
 const User = ({ name }) => {
   const [count, setCount] = useState(0);
+  const { userName } = useContext(UserContext);
   return (
     <div>
-      <h1>{name}</h1>
+      <h1>{userName}</h1>
       <h1>Count : {count}</h1>
       <button
         onClick={() => {

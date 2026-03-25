@@ -9,14 +9,18 @@ import { Outlet } from "react-router-dom";
 import Contact from "./components/Contact";
 import { lazy, Suspense } from "react";
 import RestaurantMenu from "./components/RestaurantMenu";
+import appStore from "./utils/appStore";
+import { Provider } from "react-redux";
 
 const Grocery = lazy(() => import("./components/Grocery"));
 const AppLayout = () => {
   return (
-    <div>
-      <Header />
-      <Outlet />
-    </div>
+    <Provider store={appStore}>
+      <div>
+        <Header />
+        <Outlet />
+      </div>
+    </Provider>
   );
 };
 const AppRouter = createBrowserRouter([

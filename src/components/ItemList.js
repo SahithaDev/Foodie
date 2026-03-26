@@ -1,6 +1,15 @@
+import { useDispatch } from "react-redux";
 import { CDN_URL } from "../utils/constant";
+import { addItem, removeItem } from "../utils/cartSlice";
 
-const ItemList = ({ items }) => {
+const ItemList = ({ items, showRemove }) => {
+  const dispatch = useDispatch();
+  const handleAdd = (item) => {
+    dispatch(addItem(item));
+  };
+  const handleRemove = (item) => {
+    dispatch(removeItem(item));
+  };
   return (
     <div>
       {items.map((item) => (
@@ -21,9 +30,20 @@ const ItemList = ({ items }) => {
             </div>
             <div className="w-1/5 ">
               {/* <img src={CDN_URL + item.card.info.imageId} /> */}
-              <button className="bg-green-300 p-1 px-5shadow-lg rounded-md absolute m-2 mx-11 font-bold my-14">
+              <button
+                className="bg-green-300 p-1 px-5shadow-lg rounded-md absolute m-2 mx-11 font-bold my-14"
+                onClick={() => handleAdd(item)}
+              >
                 Add +
               </button>
+              {showRemove && (
+                <button
+                  onClick={() => handleRemove(item)}
+                  className="rounded-lg"
+                >
+                  Remove
+                </button>
+              )}
               <img src={CDN_URL + item.card.info.imageId} />
             </div>
             {/* <p className="text-xs text-gray-600">

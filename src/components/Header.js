@@ -32,7 +32,10 @@ const Header = () => {
           <li>
             <Link to="/contact">Contact Us</Link>
           </li>
-          <li>Cart-{cartItems.length + 1} items</li>
+          <li>
+            <Link to="/cart">Cart-{cartItems.length} items</Link>
+          </li>
+
           <button
             className="bg-orange-500 text-white rounded-md px-5 py-3 p-2"
             onClick={() => {

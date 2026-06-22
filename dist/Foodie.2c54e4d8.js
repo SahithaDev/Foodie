@@ -28357,7 +28357,6 @@ parcelHelpers.defineInteropFlag(exports);
 var _jsxDevRuntime = require("react/jsx-dev-runtime");
 var _restaurantCard = require("./RestaurantCard");
 var _restaurantCardDefault = parcelHelpers.interopDefault(_restaurantCard);
-// import { SWIGGY_URL } from "../utils/constant";
 var _react = require("react");
 var _shimmerUI = require("./ShimmerUI");
 var _shimmerUIDefault = parcelHelpers.interopDefault(_shimmerUI);
@@ -28366,35 +28365,41 @@ var _mockDataJson = require("../utils/mockData.json");
 var _mockDataJsonDefault = parcelHelpers.interopDefault(_mockDataJson);
 var _useOnlineStatus = require("../utils/useOnlineStatus");
 var _useOnlineStatusDefault = parcelHelpers.interopDefault(_useOnlineStatus);
+var _pagination = require("./Pagination");
+var _paginationDefault = parcelHelpers.interopDefault(_pagination);
 var _s = $RefreshSig$();
 const Body = ()=>{
     _s();
-    const [listOfRestaurants, setlistOfRestaurants] = (0, _react.useState)((0, _mockDataJsonDefault.default)); //replaced [] --> mockdata
-    const [filteredRestaurants, setFilteredRestaurants] = (0, _react.useState)((0, _mockDataJsonDefault.default)); //replaced [] --> mockdata
+    // stores all restaurants
+    const [listOfRestaurants, setlistOfRestaurants] = (0, _react.useState)((0, _mockDataJsonDefault.default));
+    // stores filtered restaurants
+    const [filteredRestaurants, setFilteredRestaurants] = (0, _react.useState)((0, _mockDataJsonDefault.default));
+    // stores search input
     const [searchText, setSearchText] = (0, _react.useState)("");
+    // stores autocomplete suggestions
     const [suggestions, setSuggestions] = (0, _react.useState)([]);
-    // const PAGE_SIZE = useEffect(() => {
-    //   fetchData();
-    // }, []);
-    // const fetchData = async () => {
-    //   const data = await fetch(SWIGGY_URL);
-    //   const json = await data.json();
-    //   setlistOfRestaurants(
-    //     json?.data.data.cards?.[1]?.card?.card?.gridElements?.infoWithStyle
-    //       .restaurants || [],
-    //   );
-    //   setFilteredRestaurants(
-    //     /**this is created to use the search functionality , like if i want to search something again
-    //     it searches from the already filtered list , which cannot be possible to search someting**/
-    //     json?.data.data.cards?.[1]?.card?.card?.gridElements?.infoWithStyle
-    //       .restaurants || [],
-    //   ); //it is mandatory to put json ,  before starting the api call (as the cards are present in json)
-    // };
+    // tracks current page
+    const [currentPage, setCurrentPage] = (0, _react.useState)(1);
+    // total restaurants after filtering
+    const totalItems = filteredRestaurants.length;
+    // restaurants per page
+    const itemsPerPage = 8;
+    // total pages
+    const noOfPages = Math.ceil(totalItems / itemsPerPage);
+    // starting index
+    const startPage = (currentPage - 1) * itemsPerPage;
+    // ending index
+    const endPage = startPage + itemsPerPage;
+    // restaurants for current page
+    const currentRestaurants = filteredRestaurants.slice(startPage, endPage);
+    // debouncing search
     (0, _react.useEffect)(()=>{
         const timer = setTimeout(()=>{
             const searchRest = listOfRestaurants.filter((res)=>res.info.name.toLowerCase().includes(searchText.toLowerCase()));
             setFilteredRestaurants(searchRest);
             setSuggestions(searchRest.slice(0, 7));
+            // reset to first page after search
+            setCurrentPage(1);
         }, 300);
         return ()=>{
             clearTimeout(timer);
@@ -28408,12 +28413,12 @@ const Body = ()=>{
         children: "Looks like you're disconnected !! Please make sure that you have good internet connection."
     }, void 0, false, {
         fileName: "src/components/Body.js",
-        lineNumber: 49,
+        lineNumber: 67,
         columnNumber: 7
     }, undefined);
     if (listOfRestaurants.length === 0) return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _shimmerUIDefault.default), {}, void 0, false, {
         fileName: "src/components/Body.js",
-        lineNumber: 56,
+        lineNumber: 75,
         columnNumber: 12
     }, undefined);
     return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -28435,7 +28440,7 @@ const Body = ()=>{
                                 }
                             }, void 0, false, {
                                 fileName: "src/components/Body.js",
-                                lineNumber: 63,
+                                lineNumber: 86,
                                 columnNumber: 11
                             }, undefined),
                             suggestions.length > 0 && searchText && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -28452,7 +28457,7 @@ const Body = ()=>{
                                                 children: restaurant.info.name
                                             }, void 0, false, {
                                                 fileName: "src/components/Body.js",
-                                                lineNumber: 85,
+                                                lineNumber: 110,
                                                 columnNumber: 19
                                             }, undefined),
                                             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
@@ -28460,24 +28465,24 @@ const Body = ()=>{
                                                 children: restaurant.info.cuisines.join(", ")
                                             }, void 0, false, {
                                                 fileName: "src/components/Body.js",
-                                                lineNumber: 87,
+                                                lineNumber: 112,
                                                 columnNumber: 19
                                             }, undefined)
                                         ]
                                     }, restaurant.info.id + restaurant.info.name, true, {
                                         fileName: "src/components/Body.js",
-                                        lineNumber: 76,
+                                        lineNumber: 101,
                                         columnNumber: 17
                                     }, undefined))
                             }, void 0, false, {
                                 fileName: "src/components/Body.js",
-                                lineNumber: 74,
+                                lineNumber: 99,
                                 columnNumber: 13
                             }, undefined)
                         ]
                     }, void 0, true, {
                         fileName: "src/components/Body.js",
-                        lineNumber: 62,
+                        lineNumber: 85,
                         columnNumber: 9
                     }, undefined),
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
@@ -28485,49 +28490,65 @@ const Body = ()=>{
                         onClick: ()=>{
                             const toprated = listOfRestaurants.filter((res)=>res.info.avgRating > 4.5);
                             setFilteredRestaurants(toprated);
-                            console.log("FILTERED toprated:", toprated); // Only >4
+                            // reset page
+                            setCurrentPage(1);
                         },
                         children: "Top rated"
                     }, void 0, false, {
                         fileName: "src/components/Body.js",
-                        lineNumber: 95,
+                        lineNumber: 123,
                         columnNumber: 9
                     }, undefined)
                 ]
             }, void 0, true, {
                 fileName: "src/components/Body.js",
-                lineNumber: 61,
+                lineNumber: 82,
                 columnNumber: 7
             }, undefined),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
                 className: "flex flex-wrap gap-10 justify-items-start",
-                children: filteredRestaurants.map((restaurant)=>/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Link), {
+                children: currentRestaurants.map((restaurant)=>/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Link), {
                         to: "/restaurants/" + restaurant.info.id,
                         children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _restaurantCardDefault.default), {
                             resData: restaurant
                         }, void 0, false, {
                             fileName: "src/components/Body.js",
-                            lineNumber: 117,
-                            columnNumber: 15
+                            lineNumber: 148,
+                            columnNumber: 13
                         }, undefined)
                     }, restaurant.info.id + "-" + restaurant.info.name, false, {
                         fileName: "src/components/Body.js",
-                        lineNumber: 113,
-                        columnNumber: 13
+                        lineNumber: 144,
+                        columnNumber: 11
                     }, undefined))
             }, void 0, false, {
                 fileName: "src/components/Body.js",
-                lineNumber: 108,
+                lineNumber: 142,
+                columnNumber: 7
+            }, undefined),
+            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                className: "flex justify-center m-8",
+                children: noOfPages > 1 && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _paginationDefault.default), {
+                    noOfPages: noOfPages,
+                    setCurrentPage: setCurrentPage
+                }, void 0, false, {
+                    fileName: "src/components/Body.js",
+                    lineNumber: 157,
+                    columnNumber: 11
+                }, undefined)
+            }, void 0, false, {
+                fileName: "src/components/Body.js",
+                lineNumber: 155,
                 columnNumber: 7
             }, undefined)
         ]
     }, void 0, true, {
         fileName: "src/components/Body.js",
-        lineNumber: 60,
+        lineNumber: 79,
         columnNumber: 5
     }, undefined);
 };
-_s(Body, "jT+2rSy6U5oj5DE9boEPtFNtj7k=", false, function() {
+_s(Body, "ptJCd658HCIV8CLoihtn0M0mI80=", false, function() {
     return [
         (0, _useOnlineStatusDefault.default)
     ];
@@ -28542,7 +28563,7 @@ $RefreshReg$(_c, "Body");
   globalThis.$RefreshReg$ = prevRefreshReg;
   globalThis.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-dev-runtime":"dVPUn","./RestaurantCard":"lCpT9","react":"jMk1U","./ShimmerUI":"9KiQ0","react-router-dom":"61z4w","../utils/mockData.json":"87TQ2","../utils/useOnlineStatus":"7Vx9K","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi"}],"lCpT9":[function(require,module,exports,__globalThis) {
+},{"react/jsx-dev-runtime":"dVPUn","./RestaurantCard":"lCpT9","react":"jMk1U","./ShimmerUI":"9KiQ0","react-router-dom":"61z4w","../utils/mockData.json":"87TQ2","../utils/useOnlineStatus":"7Vx9K","./Pagination":"ozIoh","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi"}],"lCpT9":[function(require,module,exports,__globalThis) {
 var $parcel$ReactRefreshHelpers$7721 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 $parcel$ReactRefreshHelpers$7721.init();
 var prevRefreshReg = globalThis.$RefreshReg$;
@@ -28744,7 +28765,50 @@ $RefreshReg$(_c, "Shimmer");
 },{"react/jsx-dev-runtime":"dVPUn","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi"}],"87TQ2":[function(require,module,exports,__globalThis) {
 module.exports = JSON.parse('[{"info":{"id":"123456","name":"Pizza Paradise","cloudinaryImageId":"RX_THUMBNAIL/IMAGES/VENDOR/2025/6/17/6def0f0f-9e6c-45c0-b5e6-05af750f27b5_795906.JPG","locality":"MG Road","areaName":"Central District","costForTwo":"\u20B9400 for two","cuisines":["Pizza","Italian","Fast Food"],"avgRating":4.3,"avgRatingString":"4.3","totalRatingsString":"10K+ ratings","veg":false,"sla":{"deliveryTime":30,"lastMileTravel":3.5,"slaString":"30 mins"},"aggregatedDiscountInfoV3":{"header":"50% OFF","subHeader":"UPTO \u20B9100"}}},{"info":{"id":"234567","name":"Burger Hub","cloudinaryImageId":"RX_THUMBNAIL/IMAGES/VENDOR/2024/6/24/acfcaacc-edf0-4189-8264-d614d312c0ee_740457.JPG","locality":"Park Street","areaName":"Downtown","costForTwo":"\u20B9300 for two","cuisines":["Burgers","American","Fast Food"],"avgRating":4.5,"avgRatingString":"4.5","totalRatingsString":"15K+ ratings","veg":false,"sla":{"deliveryTime":25,"lastMileTravel":2,"slaString":"25 mins"},"aggregatedDiscountInfoV3":{"header":"40% OFF","subHeader":"UPTO \u20B980"}}},{"info":{"id":"345678","name":"Green Bites","cloudinaryImageId":"e0839ff574213e6f35b3899ebf1fc597","locality":"Residency Road","areaName":"South Zone","costForTwo":"\u20B9250 for two","cuisines":["Healthy Food","Salads","Vegan"],"avgRating":4.7,"avgRatingString":"4.7","totalRatingsString":"8K+ ratings","veg":true,"sla":{"deliveryTime":20,"lastMileTravel":1.5,"slaString":"20 mins"},"aggregatedDiscountInfoV3":{"header":"30% OFF","subHeader":"UPTO \u20B975"}}},{"info":{"id":"456789","name":"Spice Kingdom","cloudinaryImageId":"rng/md/carousel/production/indian101","locality":"Brigade Road","areaName":"City Center","costForTwo":"\u20B9500 for two","cuisines":["Indian","North Indian","Biryani"],"avgRating":4.2,"avgRatingString":"4.2","totalRatingsString":"12K+ ratings","veg":false,"sla":{"deliveryTime":35,"lastMileTravel":4,"slaString":"35 mins"},"aggregatedDiscountInfoV3":{"header":"20% OFF","subHeader":"UPTO \u20B950"}}},{"info":{"id":"567890","name":"Chinese Dragon","cloudinaryImageId":"RX_THUMBNAIL/IMAGES/VENDOR/2025/6/18/ba9f1f59-30d5-44de-afad-df6db8471ead_9648.jpg","locality":"Commercial Street","areaName":"East District","costForTwo":"\u20B9350 for two","cuisines":["Chinese","Asian","Thai"],"avgRating":4.4,"avgRatingString":"4.4","totalRatingsString":"9K+ ratings","veg":false,"sla":{"deliveryTime":28,"lastMileTravel":2.8,"slaString":"28 mins"},"aggregatedDiscountInfoV3":{"header":"60% OFF","subHeader":"UPTO \u20B9120"}}},{"info":{"id":"678901","name":"Dessert Delight","cloudinaryImageId":"RX_THUMBNAIL/IMAGES/VENDOR/2024/11/8/731001f1-f1c4-4f5f-849f-79a697cb0b72_390173.jpg","locality":"Lavelle Road","areaName":"West End","costForTwo":"\u20B9200 for two","cuisines":["Desserts","Ice Cream","Bakery"],"avgRating":4.6,"avgRatingString":"4.6","totalRatingsString":"7K+ ratings","veg":true,"sla":{"deliveryTime":22,"lastMileTravel":1.8,"slaString":"22 mins"},"aggregatedDiscountInfoV3":{"header":"25% OFF","subHeader":"UPTO \u20B960"}}},{"info":{"id":"789012","name":"Sushi Station","cloudinaryImageId":"RX_THUMBNAIL/IMAGES/VENDOR/2024/6/24/acfcaacc-edf0-4189-8264-d614d312c0ee_740457.JPG","locality":"Indiranagar","areaName":"Uptown","costForTwo":"\u20B9800 for two","cuisines":["Japanese","Sushi","Asian"],"avgRating":4.8,"avgRatingString":"4.8","totalRatingsString":"5K+ ratings","veg":false,"sla":{"deliveryTime":40,"lastMileTravel":5.2,"slaString":"40 mins"},"aggregatedDiscountInfoV3":{"header":"15% OFF","subHeader":"UPTO \u20B9150"}}},{"info":{"id":"890123","name":"South Spice","cloudinaryImageId":"RX_THUMBNAIL/IMAGES/VENDOR/2025/6/17/6def0f0f-9e6c-45c0-b5e6-05af750f27b5_795906.JPG","locality":"Jayanagar","areaName":"South Bangalore","costForTwo":"\u20B9300 for two","cuisines":["South Indian","Dosa","Idli"],"avgRating":4.5,"avgRatingString":"4.5","totalRatingsString":"11K+ ratings","veg":true,"sla":{"deliveryTime":25,"lastMileTravel":3,"slaString":"25 mins"},"aggregatedDiscountInfoV3":{"header":"35% OFF","subHeader":"UPTO \u20B970"}}},{"info":{"id":"901234","name":"Pasta Palace","cloudinaryImageId":"RX_THUMBNAIL/IMAGES/VENDOR/2025/10/17/7bd350a8-55e7-459b-83a2-e250e670d194_14558.JPG","locality":"Koramangala","areaName":"Tech Hub","costForTwo":"\u20B9450 for two","cuisines":["Italian","Pasta","Continental"],"avgRating":4.1,"avgRatingString":"4.1","totalRatingsString":"6K+ ratings","veg":false,"sla":{"deliveryTime":32,"lastMileTravel":3.8,"slaString":"32 mins"},"aggregatedDiscountInfoV3":{"header":"45% OFF","subHeader":"UPTO \u20B990"}}},{"info":{"id":"123456","name":"Cheesy Slice","cloudinaryImageId":"RX_THUMBNAIL/IMAGES/VENDOR/2025/6/17/6def0f0f-9e6c-45c0-b5e6-05af750f27b5_795906.JPG","locality":"MG Road","areaName":"Central District","costForTwo":"\u20B9400 for two","cuisines":["Pizza","Italian","Fast Food"],"avgRating":4.3,"avgRatingString":"4.3","totalRatingsString":"10K+ ratings","veg":false,"sla":{"deliveryTime":30,"lastMileTravel":3.5,"slaString":"30 mins"},"aggregatedDiscountInfoV3":{"header":"50% OFF","subHeader":"UPTO \u20B9100"}}},{"info":{"id":"234567","name":"Burger Point","cloudinaryImageId":"RX_THUMBNAIL/IMAGES/VENDOR/2024/6/24/acfcaacc-edf0-4189-8264-d614d312c0ee_740457.JPG","locality":"Park Street","areaName":"Downtown","costForTwo":"\u20B9300 for two","cuisines":["Burgers","American","Fast Food"],"avgRating":4.5,"avgRatingString":"4.5","totalRatingsString":"15K+ ratings","veg":false,"sla":{"deliveryTime":25,"lastMileTravel":2,"slaString":"25 mins"},"aggregatedDiscountInfoV3":{"header":"40% OFF","subHeader":"UPTO \u20B980"}}},{"info":{"id":"345678","name":"Green Bowl","cloudinaryImageId":"e0839ff574213e6f35b3899ebf1fc597","locality":"Residency Road","areaName":"South Zone","costForTwo":"\u20B9250 for two","cuisines":["Healthy Food","Salads","Vegan"],"avgRating":4.7,"avgRatingString":"4.7","totalRatingsString":"8K+ ratings","veg":true,"sla":{"deliveryTime":20,"lastMileTravel":1.5,"slaString":"20 mins"},"aggregatedDiscountInfoV3":{"header":"30% OFF","subHeader":"UPTO \u20B975"}}},{"info":{"id":"456789","name":"Spice Villa","cloudinaryImageId":"rng/md/carousel/production/indian101","locality":"Brigade Road","areaName":"City Center","costForTwo":"\u20B9500 for two","cuisines":["Indian","North Indian","Biryani"],"avgRating":4.2,"avgRatingString":"4.2","totalRatingsString":"12K+ ratings","veg":false,"sla":{"deliveryTime":35,"lastMileTravel":4,"slaString":"35 mins"},"aggregatedDiscountInfoV3":{"header":"20% OFF","subHeader":"UPTO \u20B950"}}},{"info":{"id":"567890","name":"Dragon Wok","cloudinaryImageId":"RX_THUMBNAIL/IMAGES/VENDOR/2025/6/18/ba9f1f59-30d5-44de-afad-df6db8471ead_9648.jpg","locality":"Commercial Street","areaName":"East District","costForTwo":"\u20B9350 for two","cuisines":["Chinese","Asian","Thai"],"avgRating":4.4,"avgRatingString":"4.4","totalRatingsString":"9K+ ratings","veg":false,"sla":{"deliveryTime":28,"lastMileTravel":2.8,"slaString":"28 mins"},"aggregatedDiscountInfoV3":{"header":"60% OFF","subHeader":"UPTO \u20B9120"}}},{"info":{"id":"678901","name":"Sweet Cravings","cloudinaryImageId":"RX_THUMBNAIL/IMAGES/VENDOR/2024/11/8/731001f1-f1c4-4f5f-849f-79a697cb0b72_390173.jpg","locality":"Lavelle Road","areaName":"West End","costForTwo":"\u20B9200 for two","cuisines":["Desserts","Ice Cream","Bakery"],"avgRating":4.6,"avgRatingString":"4.6","totalRatingsString":"7K+ ratings","veg":true,"sla":{"deliveryTime":22,"lastMileTravel":1.8,"slaString":"22 mins"},"aggregatedDiscountInfoV3":{"header":"25% OFF","subHeader":"UPTO \u20B960"}}},{"info":{"id":"789012","name":"Sushi Express","cloudinaryImageId":"RX_THUMBNAIL/IMAGES/VENDOR/2024/6/24/acfcaacc-edf0-4189-8264-d614d312c0ee_740457.JPG","locality":"Indiranagar","areaName":"Uptown","costForTwo":"\u20B9800 for two","cuisines":["Japanese","Sushi","Asian"],"avgRating":4.8,"avgRatingString":"4.8","totalRatingsString":"5K+ ratings","veg":false,"sla":{"deliveryTime":40,"lastMileTravel":5.2,"slaString":"40 mins"},"aggregatedDiscountInfoV3":{"header":"15% OFF","subHeader":"UPTO \u20B9150"}}},{"info":{"id":"890123","name":"South Aroma","cloudinaryImageId":"RX_THUMBNAIL/IMAGES/VENDOR/2025/6/17/6def0f0f-9e6c-45c0-b5e6-05af750f27b5_795906.JPG","locality":"Jayanagar","areaName":"South Bangalore","costForTwo":"\u20B9300 for two","cuisines":["South Indian","Dosa","Idli"],"avgRating":4.5,"avgRatingString":"4.5","totalRatingsString":"11K+ ratings","veg":true,"sla":{"deliveryTime":25,"lastMileTravel":3,"slaString":"25 mins"},"aggregatedDiscountInfoV3":{"header":"35% OFF","subHeader":"UPTO \u20B970"}}},{"info":{"id":"901234","name":"Pasta Corner","cloudinaryImageId":"RX_THUMBNAIL/IMAGES/VENDOR/2025/10/17/7bd350a8-55e7-459b-83a2-e250e670d194_14558.JPG","locality":"Koramangala","areaName":"Tech Hub","costForTwo":"\u20B9450 for two","cuisines":["Italian","Pasta","Continental"],"avgRating":4.1,"avgRatingString":"4.1","totalRatingsString":"6K+ ratings","veg":false,"sla":{"deliveryTime":32,"lastMileTravel":3.8,"slaString":"32 mins"},"aggregatedDiscountInfoV3":{"header":"45% OFF","subHeader":"UPTO \u20B990"}}},{"info":{"id":"123456","name":"Italian Oven","cloudinaryImageId":"RX_THUMBNAIL/IMAGES/VENDOR/2025/6/17/6def0f0f-9e6c-45c0-b5e6-05af750f27b5_795906.JPG","locality":"MG Road","areaName":"Central District","costForTwo":"\u20B9400 for two","cuisines":["Pizza","Italian","Fast Food"],"avgRating":4.3,"avgRatingString":"4.3","totalRatingsString":"10K+ ratings","veg":false,"sla":{"deliveryTime":30,"lastMileTravel":3.5,"slaString":"30 mins"},"aggregatedDiscountInfoV3":{"header":"50% OFF","subHeader":"UPTO \u20B9100"}}},{"info":{"id":"234567","name":"Burger Junction","cloudinaryImageId":"RX_THUMBNAIL/IMAGES/VENDOR/2024/6/24/acfcaacc-edf0-4189-8264-d614d312c0ee_740457.JPG","locality":"Park Street","areaName":"Downtown","costForTwo":"\u20B9300 for two","cuisines":["Burgers","American","Fast Food"],"avgRating":4.5,"avgRatingString":"4.5","totalRatingsString":"15K+ ratings","veg":false,"sla":{"deliveryTime":25,"lastMileTravel":2,"slaString":"25 mins"},"aggregatedDiscountInfoV3":{"header":"40% OFF","subHeader":"UPTO \u20B980"}}},{"info":{"id":"345678","name":"Healthy Hub","cloudinaryImageId":"e0839ff574213e6f35b3899ebf1fc597","locality":"Residency Road","areaName":"South Zone","costForTwo":"\u20B9250 for two","cuisines":["Healthy Food","Salads","Vegan"],"avgRating":4.7,"avgRatingString":"4.7","totalRatingsString":"8K+ ratings","veg":true,"sla":{"deliveryTime":20,"lastMileTravel":1.5,"slaString":"20 mins"},"aggregatedDiscountInfoV3":{"header":"30% OFF","subHeader":"UPTO \u20B975"}}},{"info":{"id":"456789","name":"Royal Biryani","cloudinaryImageId":"rng/md/carousel/production/indian101","locality":"Brigade Road","areaName":"City Center","costForTwo":"\u20B9500 for two","cuisines":["Indian","North Indian","Biryani"],"avgRating":4.2,"avgRatingString":"4.2","totalRatingsString":"12K+ ratings","veg":false,"sla":{"deliveryTime":35,"lastMileTravel":4,"slaString":"35 mins"},"aggregatedDiscountInfoV3":{"header":"20% OFF","subHeader":"UPTO \u20B950"}}},{"info":{"id":"567890","name":"Wok Express","cloudinaryImageId":"RX_THUMBNAIL/IMAGES/VENDOR/2025/6/18/ba9f1f59-30d5-44de-afad-df6db8471ead_9648.jpg","locality":"Commercial Street","areaName":"East District","costForTwo":"\u20B9350 for two","cuisines":["Chinese","Asian","Thai"],"avgRating":4.4,"avgRatingString":"4.4","totalRatingsString":"9K+ ratings","veg":false,"sla":{"deliveryTime":28,"lastMileTravel":2.8,"slaString":"28 mins"},"aggregatedDiscountInfoV3":{"header":"60% OFF","subHeader":"UPTO \u20B9120"}}},{"info":{"id":"678901","name":"Dessert Hub","cloudinaryImageId":"RX_THUMBNAIL/IMAGES/VENDOR/2024/11/8/731001f1-f1c4-4f5f-849f-79a697cb0b72_390173.jpg","locality":"Lavelle Road","areaName":"West End","costForTwo":"\u20B9200 for two","cuisines":["Desserts","Ice Cream","Bakery"],"avgRating":4.6,"avgRatingString":"4.6","totalRatingsString":"7K+ ratings","veg":true,"sla":{"deliveryTime":22,"lastMileTravel":1.8,"slaString":"22 mins"},"aggregatedDiscountInfoV3":{"header":"25% OFF","subHeader":"UPTO \u20B960"}}},{"info":{"id":"789012","name":"Tokyo Rolls","cloudinaryImageId":"RX_THUMBNAIL/IMAGES/VENDOR/2024/6/24/acfcaacc-edf0-4189-8264-d614d312c0ee_740457.JPG","locality":"Indiranagar","areaName":"Uptown","costForTwo":"\u20B9800 for two","cuisines":["Japanese","Sushi","Asian"],"avgRating":4.8,"avgRatingString":"4.8","totalRatingsString":"5K+ ratings","veg":false,"sla":{"deliveryTime":40,"lastMileTravel":5.2,"slaString":"40 mins"},"aggregatedDiscountInfoV3":{"header":"15% OFF","subHeader":"UPTO \u20B9150"}}},{"info":{"id":"890123","name":"Dosa Point","cloudinaryImageId":"RX_THUMBNAIL/IMAGES/VENDOR/2025/6/17/6def0f0f-9e6c-45c0-b5e6-05af750f27b5_795906.JPG","locality":"Jayanagar","areaName":"South Bangalore","costForTwo":"\u20B9300 for two","cuisines":["South Indian","Dosa","Idli"],"avgRating":4.5,"avgRatingString":"4.5","totalRatingsString":"11K+ ratings","veg":true,"sla":{"deliveryTime":25,"lastMileTravel":3,"slaString":"25 mins"},"aggregatedDiscountInfoV3":{"header":"35% OFF","subHeader":"UPTO \u20B970"}}},{"info":{"id":"901234","name":"Italian Bowl","cloudinaryImageId":"RX_THUMBNAIL/IMAGES/VENDOR/2025/10/17/7bd350a8-55e7-459b-83a2-e250e670d194_14558.JPG","locality":"Koramangala","areaName":"Tech Hub","costForTwo":"\u20B9450 for two","cuisines":["Italian","Pasta","Continental"],"avgRating":4.1,"avgRatingString":"4.1","totalRatingsString":"6K+ ratings","veg":false,"sla":{"deliveryTime":32,"lastMileTravel":3.8,"slaString":"32 mins"},"aggregatedDiscountInfoV3":{"header":"45% OFF","subHeader":"UPTO \u20B990"}}},{"info":{"id":"123456","name":"Pizza Planet","cloudinaryImageId":"RX_THUMBNAIL/IMAGES/VENDOR/2025/6/17/6def0f0f-9e6c-45c0-b5e6-05af750f27b5_795906.JPG","locality":"MG Road","areaName":"Central District","costForTwo":"\u20B9400 for two","cuisines":["Pizza","Italian","Fast Food"],"avgRating":4.3,"avgRatingString":"4.3","totalRatingsString":"10K+ ratings","veg":false,"sla":{"deliveryTime":30,"lastMileTravel":3.5,"slaString":"30 mins"},"aggregatedDiscountInfoV3":{"header":"50% OFF","subHeader":"UPTO \u20B9100"}}},{"info":{"id":"234567","name":"Burger Town","cloudinaryImageId":"RX_THUMBNAIL/IMAGES/VENDOR/2024/6/24/acfcaacc-edf0-4189-8264-d614d312c0ee_740457.JPG","locality":"Park Street","areaName":"Downtown","costForTwo":"\u20B9300 for two","cuisines":["Burgers","American","Fast Food"],"avgRating":4.5,"avgRatingString":"4.5","totalRatingsString":"15K+ ratings","veg":false,"sla":{"deliveryTime":25,"lastMileTravel":2,"slaString":"25 mins"},"aggregatedDiscountInfoV3":{"header":"40% OFF","subHeader":"UPTO \u20B980"}}},{"info":{"id":"345678","name":"Fresh Feast","cloudinaryImageId":"e0839ff574213e6f35b3899ebf1fc597","locality":"Residency Road","areaName":"South Zone","costForTwo":"\u20B9250 for two","cuisines":["Healthy Food","Salads","Vegan"],"avgRating":4.7,"avgRatingString":"4.7","totalRatingsString":"8K+ ratings","veg":true,"sla":{"deliveryTime":20,"lastMileTravel":1.5,"slaString":"20 mins"},"aggregatedDiscountInfoV3":{"header":"30% OFF","subHeader":"UPTO \u20B975"}}},{"info":{"id":"456789","name":"Indian Tadka","cloudinaryImageId":"rng/md/carousel/production/indian101","locality":"Brigade Road","areaName":"City Center","costForTwo":"\u20B9500 for two","cuisines":["Indian","North Indian","Biryani"],"avgRating":4.2,"avgRatingString":"4.2","totalRatingsString":"12K+ ratings","veg":false,"sla":{"deliveryTime":35,"lastMileTravel":4,"slaString":"35 mins"},"aggregatedDiscountInfoV3":{"header":"20% OFF","subHeader":"UPTO \u20B950"}}},{"info":{"id":"567890","name":"Chinese Bowl","cloudinaryImageId":"RX_THUMBNAIL/IMAGES/VENDOR/2025/6/18/ba9f1f59-30d5-44de-afad-df6db8471ead_9648.jpg","locality":"Commercial Street","areaName":"East District","costForTwo":"\u20B9350 for two","cuisines":["Chinese","Asian","Thai"],"avgRating":4.4,"avgRatingString":"4.4","totalRatingsString":"9K+ ratings","veg":false,"sla":{"deliveryTime":28,"lastMileTravel":2.8,"slaString":"28 mins"},"aggregatedDiscountInfoV3":{"header":"60% OFF","subHeader":"UPTO \u20B9120"}}},{"info":{"id":"678901","name":"Cake Corner","cloudinaryImageId":"RX_THUMBNAIL/IMAGES/VENDOR/2024/11/8/731001f1-f1c4-4f5f-849f-79a697cb0b72_390173.jpg","locality":"Lavelle Road","areaName":"West End","costForTwo":"\u20B9200 for two","cuisines":["Desserts","Ice Cream","Bakery"],"avgRating":4.6,"avgRatingString":"4.6","totalRatingsString":"7K+ ratings","veg":true,"sla":{"deliveryTime":22,"lastMileTravel":1.8,"slaString":"22 mins"},"aggregatedDiscountInfoV3":{"header":"25% OFF","subHeader":"UPTO \u20B960"}}},{"info":{"id":"789012","name":"Sushi Hub","cloudinaryImageId":"RX_THUMBNAIL/IMAGES/VENDOR/2024/6/24/acfcaacc-edf0-4189-8264-d614d312c0ee_740457.JPG","locality":"Indiranagar","areaName":"Uptown","costForTwo":"\u20B9800 for two","cuisines":["Japanese","Sushi","Asian"],"avgRating":4.8,"avgRatingString":"4.8","totalRatingsString":"5K+ ratings","veg":false,"sla":{"deliveryTime":40,"lastMileTravel":5.2,"slaString":"40 mins"},"aggregatedDiscountInfoV3":{"header":"15% OFF","subHeader":"UPTO \u20B9150"}}},{"info":{"id":"890123","name":"Idli House","cloudinaryImageId":"RX_THUMBNAIL/IMAGES/VENDOR/2025/6/17/6def0f0f-9e6c-45c0-b5e6-05af750f27b5_795906.JPG","locality":"Jayanagar","areaName":"South Bangalore","costForTwo":"\u20B9300 for two","cuisines":["South Indian","Dosa","Idli"],"avgRating":4.5,"avgRatingString":"4.5","totalRatingsString":"11K+ ratings","veg":true,"sla":{"deliveryTime":25,"lastMileTravel":3,"slaString":"25 mins"},"aggregatedDiscountInfoV3":{"header":"35% OFF","subHeader":"UPTO \u20B970"}}},{"info":{"id":"901234","name":"Pasta Hub","cloudinaryImageId":"RX_THUMBNAIL/IMAGES/VENDOR/2025/10/17/7bd350a8-55e7-459b-83a2-e250e670d194_14558.JPG","locality":"Koramangala","areaName":"Tech Hub","costForTwo":"\u20B9450 for two","cuisines":["Italian","Pasta","Continental"],"avgRating":4.1,"avgRatingString":"4.1","totalRatingsString":"6K+ ratings","veg":false,"sla":{"deliveryTime":32,"lastMileTravel":3.8,"slaString":"32 mins"},"aggregatedDiscountInfoV3":{"header":"45% OFF","subHeader":"UPTO \u20B990"}}},{"info":{"id":"123456","name":"Pizza Hut","cloudinaryImageId":"RX_THUMBNAIL/IMAGES/VENDOR/2025/6/17/6def0f0f-9e6c-45c0-b5e6-05af750f27b5_795906.JPG","locality":"MG Road","areaName":"Central District","costForTwo":"\u20B9400 for two","cuisines":["Pizza","Italian","Fast Food"],"avgRating":4.3,"avgRatingString":"4.3","totalRatingsString":"10K+ ratings","veg":false,"sla":{"deliveryTime":30,"lastMileTravel":3.5,"slaString":"30 mins"},"aggregatedDiscountInfoV3":{"header":"50% OFF","subHeader":"UPTO \u20B9100"}}},{"info":{"id":"234567","name":"Stacked Burgers","cloudinaryImageId":"RX_THUMBNAIL/IMAGES/VENDOR/2024/6/24/acfcaacc-edf0-4189-8264-d614d312c0ee_740457.JPG","locality":"Park Street","areaName":"Downtown","costForTwo":"\u20B9300 for two","cuisines":["Burgers","American","Fast Food"],"avgRating":4.5,"avgRatingString":"4.5","totalRatingsString":"15K+ ratings","veg":false,"sla":{"deliveryTime":25,"lastMileTravel":2,"slaString":"25 mins"},"aggregatedDiscountInfoV3":{"header":"40% OFF","subHeader":"UPTO \u20B980"}}},{"info":{"id":"345678","name":"Pure Veggies","cloudinaryImageId":"e0839ff574213e6f35b3899ebf1fc597","locality":"Residency Road","areaName":"South Zone","costForTwo":"\u20B9250 for two","cuisines":["Healthy Food","Salads","Vegan"],"avgRating":4.7,"avgRatingString":"4.7","totalRatingsString":"8K+ ratings","veg":true,"sla":{"deliveryTime":20,"lastMileTravel":1.5,"slaString":"20 mins"},"aggregatedDiscountInfoV3":{"header":"30% OFF","subHeader":"UPTO \u20B975"}}},{"info":{"id":"456789","name":"Royal Curry","cloudinaryImageId":"rng/md/carousel/production/indian101","locality":"Brigade Road","areaName":"City Center","costForTwo":"\u20B9500 for two","cuisines":["Indian","North Indian","Biryani"],"avgRating":4.2,"avgRatingString":"4.2","totalRatingsString":"12K+ ratings","veg":false,"sla":{"deliveryTime":35,"lastMileTravel":4,"slaString":"35 mins"},"aggregatedDiscountInfoV3":{"header":"20% OFF","subHeader":"UPTO \u20B950"}}},{"info":{"id":"567890","name":"Wok Dynasty","cloudinaryImageId":"RX_THUMBNAIL/IMAGES/VENDOR/2025/6/18/ba9f1f59-30d5-44de-afad-df6db8471ead_9648.jpg","locality":"Commercial Street","areaName":"East District","costForTwo":"\u20B9350 for two","cuisines":["Chinese","Asian","Thai"],"avgRating":4.4,"avgRatingString":"4.4","totalRatingsString":"9K+ ratings","veg":false,"sla":{"deliveryTime":28,"lastMileTravel":2.8,"slaString":"28 mins"},"aggregatedDiscountInfoV3":{"header":"60% OFF","subHeader":"UPTO \u20B9120"}}},{"info":{"id":"678901","name":"Pastry Palace","cloudinaryImageId":"RX_THUMBNAIL/IMAGES/VENDOR/2024/11/8/731001f1-f1c4-4f5f-849f-79a697cb0b72_390173.jpg","locality":"Lavelle Road","areaName":"West End","costForTwo":"\u20B9200 for two","cuisines":["Desserts","Ice Cream","Bakery"],"avgRating":4.6,"avgRatingString":"4.6","totalRatingsString":"7K+ ratings","veg":true,"sla":{"deliveryTime":22,"lastMileTravel":1.8,"slaString":"22 mins"},"aggregatedDiscountInfoV3":{"header":"25% OFF","subHeader":"UPTO \u20B960"}}},{"info":{"id":"789012","name":"Tokyo Bowl","cloudinaryImageId":"RX_THUMBNAIL/IMAGES/VENDOR/2024/6/24/acfcaacc-edf0-4189-8264-d614d312c0ee_740457.JPG","locality":"Indiranagar","areaName":"Uptown","costForTwo":"\u20B9800 for two","cuisines":["Japanese","Sushi","Asian"],"avgRating":4.8,"avgRatingString":"4.8","totalRatingsString":"5K+ ratings","veg":false,"sla":{"deliveryTime":40,"lastMileTravel":5.2,"slaString":"40 mins"},"aggregatedDiscountInfoV3":{"header":"15% OFF","subHeader":"UPTO \u20B9150"}}},{"info":{"id":"890123","name":"Curry Leaf","cloudinaryImageId":"RX_THUMBNAIL/IMAGES/VENDOR/2025/6/17/6def0f0f-9e6c-45c0-b5e6-05af750f27b5_795906.JPG","locality":"Jayanagar","areaName":"South Bangalore","costForTwo":"\u20B9300 for two","cuisines":["South Indian","Dosa","Idli"],"avgRating":4.5,"avgRatingString":"4.5","totalRatingsString":"11K+ ratings","veg":true,"sla":{"deliveryTime":25,"lastMileTravel":3,"slaString":"25 mins"},"aggregatedDiscountInfoV3":{"header":"35% OFF","subHeader":"UPTO \u20B970"}}},{"info":{"id":"901234","name":"Italian Feast","cloudinaryImageId":"RX_THUMBNAIL/IMAGES/VENDOR/2025/10/17/7bd350a8-55e7-459b-83a2-e250e670d194_14558.JPG","locality":"Koramangala","areaName":"Tech Hub","costForTwo":"\u20B9450 for two","cuisines":["Italian","Pasta","Continental"],"avgRating":4.1,"avgRatingString":"4.1","totalRatingsString":"6K+ ratings","veg":false,"sla":{"deliveryTime":32,"lastMileTravel":3.8,"slaString":"32 mins"},"aggregatedDiscountInfoV3":{"header":"45% OFF","subHeader":"UPTO \u20B990"}}},{"info":{"id":"123456","name":"Pizza Junction","cloudinaryImageId":"RX_THUMBNAIL/IMAGES/VENDOR/2025/6/17/6def0f0f-9e6c-45c0-b5e6-05af750f27b5_795906.JPG","locality":"MG Road","areaName":"Central District","costForTwo":"\u20B9400 for two","cuisines":["Pizza","Italian","Fast Food"],"avgRating":4.3,"avgRatingString":"4.3","totalRatingsString":"10K+ ratings","veg":false,"sla":{"deliveryTime":30,"lastMileTravel":3.5,"slaString":"30 mins"},"aggregatedDiscountInfoV3":{"header":"50% OFF","subHeader":"UPTO \u20B9100"}}},{"info":{"id":"234567","name":"Burger Arena","cloudinaryImageId":"RX_THUMBNAIL/IMAGES/VENDOR/2024/6/24/acfcaacc-edf0-4189-8264-d614d312c0ee_740457.JPG","locality":"Park Street","areaName":"Downtown","costForTwo":"\u20B9300 for two","cuisines":["Burgers","American","Fast Food"],"avgRating":4.5,"avgRatingString":"4.5","totalRatingsString":"15K+ ratings","veg":false,"sla":{"deliveryTime":25,"lastMileTravel":2,"slaString":"25 mins"},"aggregatedDiscountInfoV3":{"header":"40% OFF","subHeader":"UPTO \u20B980"}}},{"info":{"id":"345678","name":"Nature Bowl","cloudinaryImageId":"e0839ff574213e6f35b3899ebf1fc597","locality":"Residency Road","areaName":"South Zone","costForTwo":"\u20B9250 for two","cuisines":["Healthy Food","Salads","Vegan"],"avgRating":4.7,"avgRatingString":"4.7","totalRatingsString":"8K+ ratings","veg":true,"sla":{"deliveryTime":20,"lastMileTravel":1.5,"slaString":"20 mins"},"aggregatedDiscountInfoV3":{"header":"30% OFF","subHeader":"UPTO \u20B975"}}},{"info":{"id":"456789","name":"Desi Flavors","cloudinaryImageId":"rng/md/carousel/production/indian101","locality":"Brigade Road","areaName":"City Center","costForTwo":"\u20B9500 for two","cuisines":["Indian","North Indian","Biryani"],"avgRating":4.2,"avgRatingString":"4.2","totalRatingsString":"12K+ ratings","veg":false,"sla":{"deliveryTime":35,"lastMileTravel":4,"slaString":"35 mins"},"aggregatedDiscountInfoV3":{"header":"20% OFF","subHeader":"UPTO \u20B950"}}},{"info":{"id":"567890","name":"Asian Flames","cloudinaryImageId":"RX_THUMBNAIL/IMAGES/VENDOR/2025/6/18/ba9f1f59-30d5-44de-afad-df6db8471ead_9648.jpg","locality":"Commercial Street","areaName":"East District","costForTwo":"\u20B9350 for two","cuisines":["Chinese","Asian","Thai"],"avgRating":4.4,"avgRatingString":"4.4","totalRatingsString":"9K+ ratings","veg":false,"sla":{"deliveryTime":28,"lastMileTravel":2.8,"slaString":"28 mins"},"aggregatedDiscountInfoV3":{"header":"60% OFF","subHeader":"UPTO \u20B9120"}}},{"info":{"id":"678901","name":"Ice Cream World","cloudinaryImageId":"RX_THUMBNAIL/IMAGES/VENDOR/2024/11/8/731001f1-f1c4-4f5f-849f-79a697cb0b72_390173.jpg","locality":"Lavelle Road","areaName":"West End","costForTwo":"\u20B9200 for two","cuisines":["Desserts","Ice Cream","Bakery"],"avgRating":4.6,"avgRatingString":"4.6","totalRatingsString":"7K+ ratings","veg":true,"sla":{"deliveryTime":22,"lastMileTravel":1.8,"slaString":"22 mins"},"aggregatedDiscountInfoV3":{"header":"25% OFF","subHeader":"UPTO \u20B960"}}},{"info":{"id":"789012","name":"Asian Sushi","cloudinaryImageId":"RX_THUMBNAIL/IMAGES/VENDOR/2024/6/24/acfcaacc-edf0-4189-8264-d614d312c0ee_740457.JPG","locality":"Indiranagar","areaName":"Uptown","costForTwo":"\u20B9800 for two","cuisines":["Japanese","Sushi","Asian"],"avgRating":4.8,"avgRatingString":"4.8","totalRatingsString":"5K+ ratings","veg":false,"sla":{"deliveryTime":40,"lastMileTravel":5.2,"slaString":"40 mins"},"aggregatedDiscountInfoV3":{"header":"15% OFF","subHeader":"UPTO \u20B9150"}}},{"info":{"id":"890123","name":"South Flavors","cloudinaryImageId":"RX_THUMBNAIL/IMAGES/VENDOR/2025/6/17/6def0f0f-9e6c-45c0-b5e6-05af750f27b5_795906.JPG","locality":"Jayanagar","areaName":"South Bangalore","costForTwo":"\u20B9300 for two","cuisines":["South Indian","Dosa","Idli"],"avgRating":4.5,"avgRatingString":"4.5","totalRatingsString":"11K+ ratings","veg":true,"sla":{"deliveryTime":25,"lastMileTravel":3,"slaString":"25 mins"},"aggregatedDiscountInfoV3":{"header":"35% OFF","subHeader":"UPTO \u20B970"}}},{"info":{"id":"901234","name":"Creamy Pasta","cloudinaryImageId":"RX_THUMBNAIL/IMAGES/VENDOR/2025/10/17/7bd350a8-55e7-459b-83a2-e250e670d194_14558.JPG","locality":"Koramangala","areaName":"Tech Hub","costForTwo":"\u20B9450 for two","cuisines":["Italian","Pasta","Continental"],"avgRating":4.1,"avgRatingString":"4.1","totalRatingsString":"6K+ ratings","veg":false,"sla":{"deliveryTime":32,"lastMileTravel":3.8,"slaString":"32 mins"},"aggregatedDiscountInfoV3":{"header":"45% OFF","subHeader":"UPTO \u20B990"}}}]');
 
-},{}],"bv2mH":[function(require,module,exports,__globalThis) {
+},{}],"ozIoh":[function(require,module,exports,__globalThis) {
+var $parcel$ReactRefreshHelpers$8247 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+$parcel$ReactRefreshHelpers$8247.init();
+var prevRefreshReg = globalThis.$RefreshReg$;
+var prevRefreshSig = globalThis.$RefreshSig$;
+$parcel$ReactRefreshHelpers$8247.prelude(module);
+
+try {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _jsxDevRuntime = require("react/jsx-dev-runtime");
+var _body = require("./Body");
+var _bodyDefault = parcelHelpers.interopDefault(_body);
+const Pagination = ({ noOfPages, setCurrentPage })=>{
+    const pages = [
+        ...Array(noOfPages).keys()
+    ];
+    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+        children: pages.map((n)=>/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
+                className: "border border-black p-2 m-2",
+                onClick: ()=>setCurrentPage(n + 1),
+                children: n + 1
+            }, n, false, {
+                fileName: "src/components/Pagination.js",
+                lineNumber: 7,
+                columnNumber: 9
+            }, undefined))
+    }, void 0, false, {
+        fileName: "src/components/Pagination.js",
+        lineNumber: 5,
+        columnNumber: 5
+    }, undefined);
+};
+_c = Pagination;
+exports.default = Pagination;
+var _c;
+$RefreshReg$(_c, "Pagination");
+
+  $parcel$ReactRefreshHelpers$8247.postlude(module);
+} finally {
+  globalThis.$RefreshReg$ = prevRefreshReg;
+  globalThis.$RefreshSig$ = prevRefreshSig;
+}
+},{"react/jsx-dev-runtime":"dVPUn","./Body":"loQlg","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi"}],"bv2mH":[function(require,module,exports,__globalThis) {
 var $parcel$ReactRefreshHelpers$f021 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 $parcel$ReactRefreshHelpers$f021.init();
 var prevRefreshReg = globalThis.$RefreshReg$;

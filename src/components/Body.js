@@ -39,6 +39,7 @@ const Body = () => {
 
   // restaurants for current page
   const currentRestaurants = filteredRestaurants.slice(startPage, endPage);
+  console.log("Current Page in Body:", currentPage);
 
   // debouncing search
   useEffect(() => {
@@ -166,7 +167,11 @@ w-[300px]
 
       <div className="flex justify-center m-8">
         {noOfPages > 1 && (
-          <Pagination noOfPages={noOfPages} setCurrentPage={setCurrentPage} />
+          <Pagination
+            noOfPages={noOfPages}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+          />
         )}
       </div>
     </div>

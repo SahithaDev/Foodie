@@ -57866,6 +57866,7 @@ const Body = ()=>{
     const endPage = startPage + itemsPerPage;
     // restaurants for current page
     const currentRestaurants = filteredRestaurants.slice(startPage, endPage);
+    console.log("Current Page in Body:", currentPage);
     // debouncing search
     (0, _react.useEffect)(()=>{
         const timer = setTimeout(()=>{
@@ -57887,12 +57888,12 @@ const Body = ()=>{
         children: "Looks like you're disconnected !! Please make sure that you have good internet connection."
     }, void 0, false, {
         fileName: "src/components/Body.js",
-        lineNumber: 67,
+        lineNumber: 68,
         columnNumber: 7
     }, undefined);
     if (listOfRestaurants.length === 0) return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _shimmerUIDefault.default), {}, void 0, false, {
         fileName: "src/components/Body.js",
-        lineNumber: 75,
+        lineNumber: 76,
         columnNumber: 12
     }, undefined);
     return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -57914,7 +57915,7 @@ const Body = ()=>{
                                 }
                             }, void 0, false, {
                                 fileName: "src/components/Body.js",
-                                lineNumber: 86,
+                                lineNumber: 87,
                                 columnNumber: 11
                             }, undefined),
                             suggestions.length > 0 && searchText && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -57931,7 +57932,7 @@ const Body = ()=>{
                                                 children: restaurant.info.name
                                             }, void 0, false, {
                                                 fileName: "src/components/Body.js",
-                                                lineNumber: 122,
+                                                lineNumber: 123,
                                                 columnNumber: 19
                                             }, undefined),
                                             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
@@ -57939,24 +57940,24 @@ const Body = ()=>{
                                                 children: restaurant.info.cuisines.join(", ")
                                             }, void 0, false, {
                                                 fileName: "src/components/Body.js",
-                                                lineNumber: 124,
+                                                lineNumber: 125,
                                                 columnNumber: 19
                                             }, undefined)
                                         ]
                                     }, restaurant.info.id + restaurant.info.name, true, {
                                         fileName: "src/components/Body.js",
-                                        lineNumber: 113,
+                                        lineNumber: 114,
                                         columnNumber: 17
                                     }, undefined))
                             }, void 0, false, {
                                 fileName: "src/components/Body.js",
-                                lineNumber: 111,
+                                lineNumber: 112,
                                 columnNumber: 13
                             }, undefined)
                         ]
                     }, void 0, true, {
                         fileName: "src/components/Body.js",
-                        lineNumber: 85,
+                        lineNumber: 86,
                         columnNumber: 9
                     }, undefined),
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
@@ -57970,13 +57971,13 @@ const Body = ()=>{
                         children: "Top rated"
                     }, void 0, false, {
                         fileName: "src/components/Body.js",
-                        lineNumber: 135,
+                        lineNumber: 136,
                         columnNumber: 9
                     }, undefined)
                 ]
             }, void 0, true, {
                 fileName: "src/components/Body.js",
-                lineNumber: 82,
+                lineNumber: 83,
                 columnNumber: 7
             }, undefined),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -57987,38 +57988,39 @@ const Body = ()=>{
                             resData: restaurant
                         }, void 0, false, {
                             fileName: "src/components/Body.js",
-                            lineNumber: 160,
+                            lineNumber: 161,
                             columnNumber: 13
                         }, undefined)
                     }, restaurant.info.id + "-" + restaurant.info.name, false, {
                         fileName: "src/components/Body.js",
-                        lineNumber: 156,
+                        lineNumber: 157,
                         columnNumber: 11
                     }, undefined))
             }, void 0, false, {
                 fileName: "src/components/Body.js",
-                lineNumber: 154,
+                lineNumber: 155,
                 columnNumber: 7
             }, undefined),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
                 className: "flex justify-center m-8",
                 children: noOfPages > 1 && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _paginationDefault.default), {
                     noOfPages: noOfPages,
+                    currentPage: currentPage,
                     setCurrentPage: setCurrentPage
                 }, void 0, false, {
                     fileName: "src/components/Body.js",
-                    lineNumber: 169,
+                    lineNumber: 170,
                     columnNumber: 11
                 }, undefined)
             }, void 0, false, {
                 fileName: "src/components/Body.js",
-                lineNumber: 167,
+                lineNumber: 168,
                 columnNumber: 7
             }, undefined)
         ]
     }, void 0, true, {
         fileName: "src/components/Body.js",
-        lineNumber: 79,
+        lineNumber: 80,
         columnNumber: 5
     }, undefined);
 };
@@ -58251,25 +58253,63 @@ try {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _jsxDevRuntime = require("react/jsx-dev-runtime");
-var _body = require("./Body");
-var _bodyDefault = parcelHelpers.interopDefault(_body);
-const Pagination = ({ noOfPages, setCurrentPage })=>{
-    const pages = [
-        ...Array(noOfPages).keys()
-    ];
+const Pagination = (props)=>{
+    console.log("Pagination props:", props);
+    const { noOfPages, currentPage, setCurrentPage } = props;
+    const getPageNumbers = ()=>{
+        const pages = [];
+        console.log("Pagination component loaded");
+        if (noOfPages <= 5) for(let i = 1; i <= noOfPages; i++)pages.push(i);
+        else {
+            if (currentPage <= 3) pages.push(1, 2, 3, "...", noOfPages);
+            else if (currentPage >= noOfPages - 2) pages.push(1, "...", noOfPages - 2, noOfPages - 1, noOfPages);
+            else pages.push(1, "...", currentPage - 1, currentPage, currentPage + 1, "...", noOfPages);
+        }
+        return pages;
+    };
     return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-        children: pages.map((n)=>/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
-                className: "   bg-orange-500   text-white   rounded   px-4   py-2   mx-1   hover:bg-orange-600   ",
-                onClick: ()=>setCurrentPage(n + 1),
-                children: n + 1
-            }, n, false, {
+        className: "flex items-center gap-2",
+        children: [
+            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
+                disabled: currentPage === 1,
+                onClick: ()=>setCurrentPage(currentPage - 1),
+                className: "px-4 py-2 rounded bg-orange-500 text-white disabled:bg-gray-400",
+                children: "Prev"
+            }, void 0, false, {
                 fileName: "src/components/Pagination.js",
-                lineNumber: 7,
-                columnNumber: 9
-            }, undefined))
-    }, void 0, false, {
+                lineNumber: 37,
+                columnNumber: 7
+            }, undefined),
+            getPageNumbers().map((page, index)=>page === "..." ? /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("span", {
+                    className: "px-2 font-bold",
+                    children: "..."
+                }, index, false, {
+                    fileName: "src/components/Pagination.js",
+                    lineNumber: 46,
+                    columnNumber: 11
+                }, undefined) : /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
+                    onClick: ()=>setCurrentPage(page),
+                    className: `px-4 py-2 rounded transition-all duration-300 ${currentPage === page ? "bg-orange-600 text-white" : "bg-orange-500 text-white hover:bg-orange-600"}`,
+                    children: page
+                }, index, false, {
+                    fileName: "src/components/Pagination.js",
+                    lineNumber: 50,
+                    columnNumber: 11
+                }, undefined)),
+            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
+                disabled: currentPage === noOfPages,
+                onClick: ()=>setCurrentPage(currentPage + 1),
+                className: "px-4 py-2 rounded bg-orange-500 text-white disabled:bg-gray-400",
+                children: "Next"
+            }, void 0, false, {
+                fileName: "src/components/Pagination.js",
+                lineNumber: 64,
+                columnNumber: 7
+            }, undefined)
+        ]
+    }, void 0, true, {
         fileName: "src/components/Pagination.js",
-        lineNumber: 5,
+        lineNumber: 35,
         columnNumber: 5
     }, undefined);
 };
@@ -58283,7 +58323,7 @@ $RefreshReg$(_c, "Pagination");
   globalThis.$RefreshReg$ = prevRefreshReg;
   globalThis.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-dev-runtime":"dVPUn","./Body":"loQlg","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi"}],"bv2mH":[function(require,module,exports,__globalThis) {
+},{"react/jsx-dev-runtime":"dVPUn","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi"}],"bv2mH":[function(require,module,exports,__globalThis) {
 var $parcel$ReactRefreshHelpers$f021 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 $parcel$ReactRefreshHelpers$f021.init();
 var prevRefreshReg = globalThis.$RefreshReg$;
@@ -58303,8 +58343,10 @@ var _userClass = require("./UserClass");
 var _userClassDefault = parcelHelpers.interopDefault(_userClass);
 const About = ()=>{
     return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+        className: "bg-white dark:bg-gray-900 text-black dark:text-white min-h-screen transition-colors duration-300",
         children: [
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h1", {
+                className: "text-3xl font-bold text-center pt-8 pb-4",
                 children: "About Us"
             }, void 0, false, {
                 fileName: "src/components/About.js",

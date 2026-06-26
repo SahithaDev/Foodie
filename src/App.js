@@ -12,15 +12,18 @@ import RestaurantMenu from "./components/RestaurantMenu";
 import appStore from "./utils/appStore";
 import { Provider } from "react-redux";
 import Cart from "./components/Cart";
+import { ThemeProvider } from "./utils/ThemeContext";
 
 const Grocery = lazy(() => import("./components/Grocery"));
 const AppLayout = () => {
   return (
     <Provider store={appStore}>
-      <div>
-        <Header />
-        <Outlet />
-      </div>
+      <ThemeProvider>
+        <div className="bg-white dark:bg-gray-900 min-h-screen transition-colors duration-300">
+          <Header />
+          <Outlet />
+        </div>
+      </ThemeProvider>
     </Provider>
   );
 };

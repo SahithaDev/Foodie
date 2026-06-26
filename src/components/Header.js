@@ -5,6 +5,7 @@ import UserContext from "../utils/UserContext";
 import { useContext } from "react";
 import useOnlineStatus from "../utils/useOnlineStatus";
 import { useSelector } from "react-redux";
+import ThemeContext from "../utils/ThemeContext";
 
 const Header = () => {
   const [loginBtn, setloginBtn] = useState("Login");

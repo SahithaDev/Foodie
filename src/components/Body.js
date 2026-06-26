@@ -76,7 +76,7 @@ const Body = () => {
   }
 
   return (
-    <div className="body">
+    <div className="body text-black dark:text-white">
       {/* Search + Filter Section */}
 
       <div className="flex justify-between">
@@ -85,7 +85,19 @@ const Body = () => {
         <div className="relative">
           <input
             type="text"
-            className="border border-black rounded m-5 p-2 w-[300px]"
+            className="
+border
+border-black
+dark:border-gray-500
+bg-white
+dark:bg-gray-800
+text-black
+dark:text-white
+rounded
+m-5
+p-2
+w-[300px]
+"
             value={searchText}
             placeholder="Search restaurants..."
             onChange={(e) => {

@@ -5,7 +5,15 @@ const Pagination = ({ noOfPages, setCurrentPage }) => {
     <div>
       {pages.map((n) => (
         <button
-          className="border border-black p-2 m-2"
+          className="
+bg-orange-500
+text-white
+rounded
+px-4
+py-2
+mx-1
+hover:bg-orange-600
+"
           key={n}
           onClick={() => setCurrentPage(n + 1)}
         >
